@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "jsonfile": "^2.4.0",
     "vdfjs": "^2.0.3"
   }
 }

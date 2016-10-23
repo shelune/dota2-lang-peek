@@ -17,6 +17,7 @@ var abilitiesAll = [],
 		abilitiesWithDesc = [];
 
 var englishTooltips = englishData['lang']['Tokens'];
+var vietnameseTooltips = vietnameseData['lang']['Tokens'];
 
 function hasDuplicates(array) {
     return (new Set(array)).size !== array.length;
@@ -46,20 +47,37 @@ abilitiesBarebone = abilitiesBarebone.filter(function(elem, index, self) {
 })
 
 abilitiesBarebone.forEach(function (ability) {
-	var abilityWithHero = {'name': '', 'hero': ''};
 	heroesListData.forEach(function (hero) {
 		if (ability.includes(hero.name)) {
-			abilityWithHero.hero = hero.name;
-			abilityWithHero.name = ability.slice(hero.name.length + 1);
-			abilitiesWithDesc.push(abilityWithHero);
-			console.log(abilityWithHero);
+			var abilityFull = {'hero': '', 'name': '', 'en': '', 'vn': ''};
+			abilityFull.hero = hero.name;
+			abilityFull.name = ability.slice(hero.name.length + 1);
+			abilitiesWithDesc.push(abilityFull);
+		}
+	});
+});
+
+//console.log(abilitiesWithDesc);
+
+Object.keys(englishTooltips).forEach(function (key, value) {
+	abilitiesWithDesc.forEach(function (ability) {
+		if (key.endsWith('DOTA_Tooltip_ability_' + ability.hero + '_' + ability.name + '_Description')) {
+			ability.en = englishTooltips[key];
+		}
+	});
+});
+
+Object.keys(vietnameseTooltips).forEach(function (key, value) {
+	abilitiesWithDesc.forEach(function (ability) {
+		if (key === 'DOTA_Tooltip_ability_' + ability.hero + '_' + ability.name + '_Description') {
+			ability.vn = vietnameseTooltips[key];
 		}
 	});
 });
 
 
-/*
-fs.writeFile('output.json', JSON.stringify(data, null, 4), function(err){
+
+
+fs.writeFile('output.json', JSON.stringify(abilitiesWithDesc, null, 4), function(err){
     console.log('File successfully written! - Check your project directory for the output.json file');
 });
-*/
